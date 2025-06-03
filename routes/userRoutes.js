@@ -6,7 +6,6 @@ const {
   loginUser,
   getUserProfile,
   updateUserProfile,
-  register,
   login,
   forgotPassword,
   resetPassword,
@@ -16,7 +15,7 @@ const {
 } = require("../controllers/userController");
 
 // Public routes
-router.post("/register", register);
+router.post("/register", registerUser);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
