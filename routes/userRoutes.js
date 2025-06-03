@@ -18,9 +18,9 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
 // Protected routes
-router.post("/register", protect, authorize("admin"), registerUser);
+router.post("/admin/register", protect, authorize("admin"), registerUser);
 router.get("/profile", protect, getProfile);
-router.put("/profile", protect, updateProfile);
+router.put("/update/profile", protect, updateProfile);
 router.put("/change-password", protect, changePassword);
 
 module.exports = router;
