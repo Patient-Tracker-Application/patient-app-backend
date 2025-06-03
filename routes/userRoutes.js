@@ -4,9 +4,6 @@ const { protect, authorize } = require("../middleware/authMiddleware");
 const {
   registerUser,
   loginUser,
-  getUserProfile,
-  updateUserProfile,
-  login,
   forgotPassword,
   resetPassword,
   changePassword,
@@ -16,7 +13,7 @@ const {
 
 // Public routes
 router.post("/register", registerUser);
-router.post("/login", login);
+router.post("/login", loginUser);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
