@@ -8,7 +8,7 @@ const {
   resetPassword,
   changePassword,
   updateProfile,
-  getProfile,
+  getUserProfile,
 } = require("../controllers/userController");
 
 // Public routes
@@ -19,7 +19,7 @@ router.post("/reset-password", resetPassword);
 
 // Protected routes
 router.post("/admin/register", protect, authorize("admin"), registerUser);
-router.get("/profile", protect, getProfile);
+router.get("/profile", protect, getUserProfile);
 router.put("/update/profile", protect, updateProfile);
 router.put("/change-password", protect, changePassword);
 
