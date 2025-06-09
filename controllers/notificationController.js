@@ -14,6 +14,7 @@ const createNotification = async (req, res) => {
       notificationType,
       userType,
       userId,
+      createdBy: req.user._id,
     });
 
     res.status(201).json({
@@ -53,15 +54,19 @@ const getAllNotifications = async (req, res) => {
   }
 };
 
-// @desc    Get user's notifications
-// @route   GET /api/notifications/user
+// @desc    Get notifications with optional filtering by userId and createdBy
+// @route   GET /api/notifications
 // @access  Private
 const getUserNotifications = async (req, res) => {
   try {
-    const notifications = await Notification.find({
-      userId: req.user._id,
-    }).sort("-createdAt");
-
+    const { userId, createdBy } = req.query;
+    const filter = { isDeleted: false };
+    if (userId) filter.userId = userId;
+    if (createdBy) filter.createdBy = createdBy;
+    const notifications = await Notification.find(filter)
+      .populate("userId", "firstName lastName email")
+      .populate("createdBy", "firstName lastName email")
+      .sort("-createdAt");
     res.json({
       success: true,
       count: notifications.length,
@@ -165,6 +170,32 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+// @desc    Mark notifications as deleted (isDeleted: true) based on filters
+// @route   PUT /api/notifications/mark-deleted
+// @access  Private
+const markNotificationsDeleted = async (req, res) => {
+  try {
+    const { userId, createdBy } = req.body;
+    const filter = {};
+    if (userId) filter.userId = userId;
+    if (createdBy) filter.createdBy = createdBy;
+    // Only update notifications that are not already deleted
+    filter.isDeleted = false;
+    const result = await Notification.updateMany(filter, { isDeleted: true });
+    res.json({
+      success: true,
+      message: "Notifications  deleted",
+      modifiedCount: result.modifiedCount,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error marking notifications as deleted",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createNotification,
   getAllNotifications,
@@ -172,4 +203,5 @@ module.exports = {
   markAsRead,
   markAllAsRead,
   deleteNotification,
+  markNotificationsDeleted,
 };

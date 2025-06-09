@@ -39,6 +39,11 @@ const generateRandomString = (length = 32) => {
   return crypto.randomBytes(length).toString("hex");
 };
 
+// Generate a 6-digit OTP
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
 module.exports = {
   generateRandomPassword,
   isValidObjectId,
@@ -46,4 +51,5 @@ module.exports = {
   formatDate,
   formatTime,
   generateRandomString,
+  generateOTP,
 };

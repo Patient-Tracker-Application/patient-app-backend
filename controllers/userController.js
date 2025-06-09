@@ -122,6 +122,7 @@ const registerUser = async (req, res) => {
       dob,
       profilePic,
       accountOpeningDate: new Date(),
+      createdBy: req.user._id,
       ...(role === "doctor" && {
         username,
         maritalStatus,
@@ -409,8 +410,7 @@ const resetPassword = async (req, res) => {
     }
 
     // Update password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword;
     user.resetPasswordOTP = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
@@ -461,8 +461,7 @@ const changePassword = async (req, res) => {
     }
 
     // Update password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword;
     await user.save();
 
     // Send password changed email
@@ -566,6 +565,64 @@ const updateProfile = async (req, res) => {
   }
 };
 
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await User.find().select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "No users found",
+      });
+    }
+    res.json({
+      success: true,
+      data: user,
+      message: "Users retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Get users error:", error);
+    res.status(400).json({
+      success: false,
+      message: "Failed to retrieve users",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get all patients created by the current doctor
+// @route   GET /api/users/my-patients
+// @access  Private/Doctor
+const getMyPatients = async (req, res) => {
+  try {
+    // Ensure only doctors can access
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only doctors can view their patients.",
+      });
+    }
+    const patients = await User.find({
+      createdBy: req.user._id,
+      role: "patient",
+    }).select("-password");
+    res.json({
+      success: true,
+      count: patients.length,
+      data: patients,
+      message: "Patients retrieved successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error retrieving patients",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -574,4 +631,6 @@ module.exports = {
   resetPassword,
   changePassword,
   updateProfile,
+  getAllUsers,
+  getMyPatients,
 };

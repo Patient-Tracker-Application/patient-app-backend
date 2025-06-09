@@ -12,7 +12,7 @@ const { protect, authorize } = require("../middleware/authMiddleware");
 
 // Protected routes
 router.post("/", protect, authorize("doctor"), createConsultation);
-router.get("/", protect, authorize("admin"), getAllConsultations);
+router.get("/all-consultations", protect, authorize("admin"), getAllConsultations);
 router.get("/doctor", protect, authorize("doctor"), getDoctorConsultations);
 router.get("/patient", protect, authorize("patient"), getPatientConsultations);
 router.put("/:id", protect, authorize("doctor"), updateConsultation);

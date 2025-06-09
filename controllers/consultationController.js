@@ -181,7 +181,7 @@ const deleteConsultation = async (req, res) => {
       });
     }
 
-    await consultation.remove();
+    await consultation.deleteOne();
 
     res.json({
       success: true,

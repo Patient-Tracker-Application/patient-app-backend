@@ -14,7 +14,7 @@ router.use(protect);
 // Chat routes
 router.post("/", getOrCreateChat);
 router.get("/", getUserChats);
-router.post("/:chatId/messages", sendMessage);
-router.put("/:chatId/read", markMessagesAsRead);
+router.post("/messages/:chatId", sendMessage);
+router.put("/read/:chatId", markMessagesAsRead);
 
 module.exports = router;

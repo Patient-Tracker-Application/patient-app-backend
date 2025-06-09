@@ -7,6 +7,7 @@ const {
   markAsRead,
   markAllAsRead,
   deleteNotification,
+  markNotificationsDeleted,
 } = require("../controllers/notificationController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
@@ -14,10 +15,16 @@ const { protect, authorize } = require("../middleware/authMiddleware");
 router.post("/", protect, createNotification);
 
 // Protected routes
-router.get("/", protect, authorize("admin"), getAllNotifications);
+router.get(
+  "/all-notifications",
+  protect,
+  authorize("admin"),
+  getAllNotifications
+);
 router.get("/user", protect, getUserNotifications);
-router.put("/:id/read", protect, markAsRead);
+router.put("/read/:id", protect, markAsRead);
 router.put("/read-all", protect, markAllAsRead);
+router.put("/delete/:id", protect, markNotificationsDeleted);
 router.delete("/:id", protect, deleteNotification);
 
 module.exports = router;
