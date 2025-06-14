@@ -13,6 +13,21 @@ const bcrypt = require("bcryptjs");
 // @access  Private/Admin
 const registerUser = async (req, res) => {
   try {
+    // Check if user is authenticated and is a doctor
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required. Please login to register users.",
+      });
+    }
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only doctors can register users.",
+      });
+    }
+
     const {
       email,
       firstName,
@@ -122,7 +137,7 @@ const registerUser = async (req, res) => {
       dob,
       profilePic,
       accountOpeningDate: new Date(),
-      createdBy: req.user._id,
+      createdBy: req.user?._id,
       ...(role === "doctor" && {
         username,
         maritalStatus,

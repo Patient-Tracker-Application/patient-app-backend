@@ -17,7 +17,7 @@ const createAdmin = async () => {
 
     // Create admin user
     const admin = await User.create({
-      email: "admin@patienttracker.com",
+      email: "ntalidaiga@gmail.com",
       password: "Admin@123", // This will be hashed by the pre-save hook
       firstName: "System",
       lastName: "Admin",

@@ -14,12 +14,12 @@ const {
 } = require("../controllers/userController");
 
 // Public routes
-router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
 // Protected routes
+router.post("/register", protect, authorize("doctor"), registerUser);
 router.post("/admin/register", protect, authorize("admin"), registerUser);
 router.get("/profile", protect, getUserProfile);
 router.get("/all-users", protect, authorize("admin"), getAllUsers);
