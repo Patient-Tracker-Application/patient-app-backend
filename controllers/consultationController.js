@@ -12,10 +12,14 @@ const createConsultation = async (req, res) => {
       complaints,
       note,
       userId,
-      blood_pressure,
-      pulse,
-      temperature,
-      weight,
+      valuePre,
+      arm,
+      valuePulse,
+      rhythm,
+      unitsTemp,
+      units,
+      valueTemp,
+      valueWg,
     } = req.body;
 
     // Verify patient exists
@@ -34,10 +38,39 @@ const createConsultation = async (req, res) => {
       note,
       userId,
       doctorId: req.user._id,
-      blood_pressure,
-      pulse,
-      temperature,
-      weight,
+      blood_pressure: {
+        valuePre: {
+          type: valuePre,
+        },
+        arm: {
+          type: arm,
+        },
+      },
+      pulse: {
+        valuePulse: {
+          type: valuePulse,
+        },
+
+        rhythm: {
+          type: rhythm,
+        },
+      },
+      temperature: {
+        unitsTemp: {
+          type: unitsTemp,
+        },
+        valueTemp: {
+          type: valueTemp,
+        },
+      },
+      weight: {
+        units: {
+          type: units,
+        },
+        valueWg: {
+          type: valueWg,
+        },
+      },
     });
 
     res.status(201).json({

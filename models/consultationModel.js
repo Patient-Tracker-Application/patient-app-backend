@@ -30,14 +30,8 @@ const consultationSchema = new mongoose.Schema(
       ref: "User",
     },
     blood_pressure: {
-      sitting: {
-        type: Number,
-      },
-      standing: {
-        type: Number,
-      },
-      lying: {
-        type: Number,
+      valuePre: {
+        type: String,
       },
       arm: {
         type: String,
@@ -45,29 +39,23 @@ const consultationSchema = new mongoose.Schema(
       },
     },
     pulse: {
-      rate: {
+      valuePulse: {
         type: Number,
       },
-      amplitude: {
-        type: Number,
-      },
+     
       rhythm: {
         type: String,
         enum: ["regular", "irregular"],
       },
     },
     temperature: {
-      units: {
+      unitsTemp: {
         type: String,
         enum: ["F", "C"],
         default: "C",
       },
-      value: {
+      valueTemp: {
         type: Number,
-      },
-      areas: {
-        type: [String],
-        enum: ["oral", "rectal", "AX", "TMP"],
       },
     },
     weight: {
@@ -76,13 +64,8 @@ const consultationSchema = new mongoose.Schema(
         enum: ["lbs", "kg"],
         default: "kg",
       },
-      value: {
+      valueWg: {
         type: Number,
-      },
-      is_shoes: {
-        type: String,
-        enum: ["yes", "no"],
-        default: "no",
       },
     },
     status: {
