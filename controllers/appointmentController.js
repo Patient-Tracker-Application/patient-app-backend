@@ -6,29 +6,33 @@ const User = require("../models/userModel");
 // @access  Private
 const createAppointment = async (req, res) => {
   try {
-    const { patientId, date, time, reason } = req.body;
+    const { patientId, doctorId, date, time, reason } = req.body;
 
     // Verify patient exists
     const patient = await User.findOne({ _id: patientId, role: "patient" });
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
     }
-
-    // Check if doctor is available at the requested time
-    const existingAppointment = await Appointment.findOne({
-      doctor: req.user._id,
-      date,
-      time,
-      status: "scheduled",
-    });
-
-    if (existingAppointment) {
-      return res.status(400).json({ message: "Time slot is already booked" });
+    // Verify doctor exists
+    const doctor = await User.findOne({ _id: doctorId, role: "doctor" });
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
     }
+    // Check if doctor is available at the requested time
+    // const existingAppointment = await Appointment.findOne({
+    //   doctor: req.user._id,
+    //   date,
+    //   time,
+    //   status: "scheduled",
+    // });
+
+    // if (existingAppointment) {
+    //   return res.status(400).json({ message: "Time slot is already booked" });
+    // }
 
     const appointment = await Appointment.create({
       patient: patientId,
-      doctor: req.user._id,
+      doctor: doctorId,
       date,
       time,
       reason,

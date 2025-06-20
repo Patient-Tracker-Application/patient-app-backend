@@ -18,7 +18,7 @@ router.get("/", protect, getAppointments);
 router.get("/admin", protect, authorize("admin"), getAllAppointments);
 
 // Doctor routes
-router.post("/", protect, authorize("doctor"), createAppointment);
+router.post("/", protect, createAppointment);
 router.get("/doctor", protect, authorize("doctor"), getDoctorAppointments);
 
 // Patient routes

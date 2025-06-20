@@ -39,37 +39,20 @@ const createConsultation = async (req, res) => {
       userId,
       doctorId: req.user._id,
       blood_pressure: {
-        valuePre: {
-          type: valuePre,
-        },
-        arm: {
-          type: arm,
-        },
+        valuePre: valuePre,
+        arm: arm,
       },
       pulse: {
-        valuePulse: {
-          type: valuePulse,
-        },
-
-        rhythm: {
-          type: rhythm,
-        },
+        valuePulse: valuePulse,
+        rhythm: rhythm,
       },
       temperature: {
-        unitsTemp: {
-          type: unitsTemp,
-        },
-        valueTemp: {
-          type: valueTemp,
-        },
+        unitsTemp: unitsTemp,
+        valueTemp: valueTemp,
       },
       weight: {
-        units: {
-          type: units,
-        },
-        valueWg: {
-          type: valueWg,
-        },
+        units: units,
+        valueWg: valueWg,
       },
     });
 
